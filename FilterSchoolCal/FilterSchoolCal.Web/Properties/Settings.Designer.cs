@@ -34,7 +34,7 @@ namespace FilterSchoolCal.Web.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lent_2015_Calendar.ics")]
         public string CalendarFileName {
             get {
                 return ((string)(this["CalendarFileName"]));

@@ -6,7 +6,7 @@
       <Value Profile="(Default)">Lent 2015</Value>
     </Setting>
     <Setting Name="CalendarFileName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Lent_2015_Calendar.ics</Value>
     </Setting>
   </Settings>
 </SettingsFile>

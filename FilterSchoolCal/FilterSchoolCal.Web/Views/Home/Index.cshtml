@@ -1,31 +1,135 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model FilterSchoolCal.Web.ViewModels.HomeViewModel
+@using FilterSchoolCal.Web.Properties
+
+@{
+    ViewBag.Title = "Make my iCal";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Make my iCal</h2>
+        <p>
+            This page allows you to filter the School's giant iCal file by year and a few major sports, shrinking it down so that when you
+            import it into your calendar you don't have School events on every day.
+        </p>
+        <p>
+            <div class="alert alert-info">
+                Generating calendar events for @Model.CalendarName
+            </div>
+        </p>
+    </div>
 </div>
 
+@using(Html.BeginForm("Filter", "Home", FormMethod.Post, new { @class = "form-inline" }))
+{
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    <div class="col-md-12">
+        <h2>What years are you interested in?</h2>
     </div>
 </div>
+
+
+<div class="row">
+    @for (var i = 0; i < Model.Groups.Count; i += 2)
+    {
+        <div class="col-md-2">
+            <div class="checkbox">
+                <label>
+                    @Html.HiddenFor(modelItem => modelItem.Groups[i].Name)
+                    @Html.CheckBoxFor(modelItem => modelItem.Groups[i].Selected) @Model.Groups[i].Name
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    @Html.HiddenFor(modelItem => modelItem.Groups[i+1].Name)
+                    @Html.CheckBoxFor(modelItem => modelItem.Groups[i+1].Selected) @Model.Groups[i+1].Name
+                </label>
+            </div>
+        </div>
+    }
+
+@*
+    <div class="col-md-2">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Common) Common
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Reception) Reception
+            </label>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Yr1) Yr1
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Yr2) Yr2
+            </label>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Yr3) Yr3
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Yr4) Yr4
+            </label>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Yr5) Yr5
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Yr6) Yr6
+            </label>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Yr7) Yr7
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Yr8) Yr8
+            </label>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.nthXI) nth XI
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(modelItem => modelItem.Swimming) Swimming
+            </label>
+        </div>
+    </div>*@
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <input type="submit" class="btn btn-info" value="Filter" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Review your selected events</h2>
+    </div>
+</div>
+}
