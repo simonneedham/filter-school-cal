@@ -32,6 +32,6 @@ namespace FilterSchoolCal.Web.ViewModels
         }
 
         public IList<Group> Groups { get; set; }
-        public IList<Event> Events { get; set; }
+        public IList<SchoolEvent> Events { get; set; }
     }
 }

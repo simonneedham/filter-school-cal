@@ -28,108 +28,60 @@
     </div>
 </div>
 
-
 <div class="row">
-    @for (var i = 0; i < Model.Groups.Count; i += 2)
+    @for (var i = 0; i < Model.Groups.Count; i++)
     {
-        <div class="col-md-2">
-            <div class="checkbox">
-                <label>
-                    @Html.HiddenFor(modelItem => modelItem.Groups[i].Name)
-                    @Html.CheckBoxFor(modelItem => modelItem.Groups[i].Selected) @Model.Groups[i].Name
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    @Html.HiddenFor(modelItem => modelItem.Groups[i+1].Name)
-                    @Html.CheckBoxFor(modelItem => modelItem.Groups[i+1].Selected) @Model.Groups[i+1].Name
-                </label>
-            </div>
-        </div>
-    }
+        if(i % 2 == 0 || i == Model.Groups.Count)
+        {
+            @:<div class="col-md-2">
+        }
+        else
+        {
+            @:&nbsp;&nbsp;&nbsp;
+        }
 
-@*
-    <div class="col-md-2">
         <div class="checkbox">
             <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Common) Common
+                @Html.HiddenFor(modelItem => modelItem.Groups[i].Name)
+                @Html.CheckBoxFor(modelItem => modelItem.Groups[i].Selected) @Model.Groups[i].Name
             </label>
         </div>
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Reception) Reception
-            </label>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Yr1) Yr1
-            </label>
-        </div>
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Yr2) Yr2
-            </label>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Yr3) Yr3
-            </label>
-        </div>
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Yr4) Yr4
-            </label>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Yr5) Yr5
-            </label>
-        </div>
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Yr6) Yr6
-            </label>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Yr7) Yr7
-            </label>
-        </div>
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Yr8) Yr8
-            </label>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.nthXI) nth XI
-            </label>
-        </div>
-        <div class="checkbox">
-            <label>
-                @Html.CheckBoxFor(modelItem => modelItem.Swimming) Swimming
-            </label>
-        </div>
-    </div>*@
+
+        if(i % 2 != 0 || i == Model.Groups.Count)
+        {
+            @:</div>
+        }
+    }
 </div>
+<div class="row"><div class="col-md-12">&nbsp;</div></div>
 <div class="row">
     <div class="col-md-2">
         <input type="submit" class="btn btn-info" value="Filter" />
+    </div>
+    <div class="col-md-10">
+        &nbsp;
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
         <h2>Review your selected events</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-condensed table-striped">
+                <tr><th></th><th>Event</th></tr>
+                @for(var j = 0; j < Model.Events.Count; j++)
+        {
+                    <tr>
+                        <td>
+                            @Html.CheckBoxFor(modelItem => modelItem.Events[j].Selected)
+                        </td>
+                        <td>
+                            @Model.Events[j].Summary
+                            @Html.HiddenFor(modelItem => modelItem.Events[j].Summary)
+                        </td>
+                    </tr>
+        }
+            </table>
+        </div>
     </div>
 </div>
 }

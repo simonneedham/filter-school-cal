@@ -32,7 +32,7 @@ namespace FilterSchoolCal
             //UID: 040000008200E00074C5B7101A82E0080000000020A2E3B81316D00100000000000000001000000055CE3489AAFE0A4CB7DB3AE01EC59D4D01000000055CE3489AAFE0A4CB7DB3AE01EC59D4D
 
             //load ical file
-            _iCal = iCalendar.LoadFromFile(@"C:\Users\simon_000\Documents\GitHub\iCalToolkit\Lent_2015_Calendar.ics")
+            _iCal = iCalendar.LoadFromFile(@"C:\Users\simon_000\Documents\GitHub\filter-school-cal\FilterSchoolCal\FilterSchoolCal\Lent_2015_Calendar.ics")
                                  .First();
 
             //populate list with unique Event summaries
@@ -43,6 +43,9 @@ namespace FilterSchoolCal
                                    .ToArray();
 
             checkedListBox1.Items.AddRange(uniqueItems);
+
+            for (var i = 0; i < uniqueItems.Length; i++)
+                Debug.WriteLine(uniqueItems[i]);
 
             //Tick off default events
             var defaultEvents = new HashSet<string>(new string[] { "Bacon Butties", "Second-Hand Uniform Shop", "Start of Term", "Term Resumes" });
