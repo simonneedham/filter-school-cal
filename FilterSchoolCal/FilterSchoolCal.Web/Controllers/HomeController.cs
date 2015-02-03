@@ -14,53 +14,37 @@ namespace FilterSchoolCal.Web.Controllers
     {
         public ActionResult Index()
         {
-            var vm = new HomeViewModel
+
+            var groups = new List<Group>
             {
-                Groups = new List<Group>
-                {
-                    new Group { Name = "Common" },
-                    new Group { Name = "Reception" },
-                    new Group { Name = "Yr1" },
-                    new Group { Name = "Yr2" },
-                    new Group { Name = "Yr3" },
-                    new Group { Name = "Yr4" },
-                    new Group { Name = "Yr5" },
-                    new Group { Name = "Yr6" },
-                    new Group { Name = "Yr7" },
-                    new Group { Name = "Yr8" },
-                    new Group { Name = "DAS" },
-                    new Group { Name = "nthXI" },
-                    new Group { Name = "Swimming" }
-                }
+                new Group { Name = "Common", RegExString = "Bacon Butties|Second-Hand Uniform Shop|Start of Term|Term Resumes|Half-Term|Mufti-Day"},
+                new Group { Name = "Reception", RegExString = "^(?!.*Staff Meeting).*Pre-Prep|Reception"},
+                new Group { Name = "Yr1", RegExString ="^(?!.*Staff Meeting).*Pre-Prep|Year 1" },
+                new Group { Name = "Yr2", RegExString="^(?!.*Staff Meeting).*Pre-Prep|Year 2"},
+                new Group { Name = "Yr3", RegExString="Yea(r|rs).*3|3P|3S|Y3|Year 2 – Year 4|No Activities|No Activities or Prep"},
+                new Group { Name = "Yr4", RegExString="Yea(r|rs).*4|Years 3 & 4|Y3 – 5|Y3 – 8|No Activities|No Activities or Prep"},
+                new Group { Name = "Yr5", RegExString="Yea(r|rs).*5|Y3 – 5|Y3 – 8|5A|5H|Y5|No Activities|No Activities or Prep" },
+                new Group { Name = "Yr6", RegExString=@"Yea(r|rs).*6|Y3 – 8|\(Y.*6|Years 5 – 7|No Activities|No Activities or Prep" },
+                new Group { Name = "Yr7" , RegExString=@"Yea(r|rs) 7|Y3 – 8|\(Y.*7|Years 5 – 7|No Activities|No Activities or Prep"},
+                new Group { Name = "Yr8", RegExString=@"Yea(r|rs) 8|Y3 – 8|\(Y.*8|No Activities|No Activities or Prep" },
+                new Group { Name = "DAS", RegExString = "DAS" },
+                new Group { Name = "nthXI", RegExString=@"\d(st|nd|rd|th)" },
+                new Group { Name = "Swimming", RegExString="Swimming" }
             };
 
-            //public bool Common { get; set; }
-            //public bool Reception { get; set; }
-            //public bool Yr1 { get; set; }
-            //public bool Yr2 { get; set; }
-            //public bool Yr3 { get; set; }
-            //public bool Yr4 { get; set; }
-            //public bool Yr5 { get; set; }
-            //public bool Yr6 { get; set; }
-            //public bool Yr7 { get; set; }
-            //public bool Yr8 { get; set; }
-            //public bool nthXI { get; set; }
-            //public bool Swimming { get; set; }
-
             var qs = this.Request.QueryString;
-
             foreach(var key in qs.AllKeys.Where(k => k != null).ToList())
             {
                 if (Boolean.Parse(qs[key]))
                 {
-                    var grp = vm.Groups.Where(w => w.Name == key).SingleOrDefault();
+                    var grp = groups.Where(w => w.Name == key).SingleOrDefault();
                     if (grp != null)
                         grp.Selected = true;
                 }
             }
 
             //Get Events
-            vm.Events = CacheHelper.Get("events", () =>
+            var events = CacheHelper.Get("events", () =>
                 {
                     var iCal = iCalendar.LoadFromFile(HttpContext.Server.MapPath("~/App_Data/" + Settings.Default.CalendarFileName))
                                         .First();
@@ -77,7 +61,15 @@ namespace FilterSchoolCal.Web.Controllers
                 }
             );
 
+            groups.Where(w => w.Selected == true)
+                  .ToList()
+                  .ForEach(grp => grp.SelectEvents(ref events));
 
+            var vm = new HomeViewModel
+            {
+                Events = events,
+                Groups = groups
+            };
 
             return View(vm);
         }
