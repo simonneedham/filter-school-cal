@@ -86,7 +86,7 @@ namespace FilterSchoolCal.Web.Controllers
             serializer.Serialize(iCal, ms, Encoding.UTF8);
             ms.Seek(0, 0);
 
-            return new FileStreamResult(ms, "text/Calendar");
+            return File(ms, "text/Calendar", "calendar.ical");
         }
 
         public ActionResult Contact()
