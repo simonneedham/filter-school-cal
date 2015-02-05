@@ -89,13 +89,6 @@ namespace FilterSchoolCal.Web.Controllers
             return new FileStreamResult(ms, "text/Calendar");
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -128,9 +121,6 @@ namespace FilterSchoolCal.Web.Controllers
         {
             var events = CacheHelper.Get("events", () =>
             {
-                //var iCal = iCalendar.LoadFromFile(HttpContext.Server.MapPath("~/App_Data/" + Settings.Default.CalendarFileName))
-                //                    .First();
-
                 var iCal = GetICal();
 
                 //populate list with unique Event summaries
