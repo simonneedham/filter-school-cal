@@ -1,10 +1,13 @@
 ﻿using DDay.iCal;
+using DDay.iCal.Serialization.iCalendar;
 using FilterSchoolCal.Web.Models;
 using FilterSchoolCal.Web.Properties;
 using FilterSchoolCal.Web.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,7 +17,94 @@ namespace FilterSchoolCal.Web.Controllers
     {
         public ActionResult Index()
         {
+            var vm = new HomeViewModel
+            {
+                Groups = GetGroups()
+            };
 
+            return View(vm);
+        }
+
+        public ActionResult Events()
+        {
+            var groups = GetGroups();
+
+            var qs = this.Request.QueryString;
+            foreach (var key in qs.AllKeys.Where(k => k != null).ToList())
+            {
+                if (Boolean.Parse(qs[key]))
+                {
+                    var grp = groups.Where(w => w.Name == key).SingleOrDefault();
+                    if (grp != null)
+                        grp.Selected = true;
+                }
+            }
+
+            //Get Events
+            var events = GetUniqueEvents();
+
+            groups.Where(w => w.Selected == true)
+                  .ToList()
+                  .ForEach(grp => grp.SelectEvents(ref events));
+
+            var vm = new HomeViewModel
+            {
+                Events = events,
+                Groups = groups
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public void Events(HomeViewModel vm)
+        {
+            string queryString = String.Empty;
+            foreach (var grp in vm.Groups.Where(w => w.Selected == true).ToList())
+                queryString += "&" + grp.Name + "=true";
+
+            if (queryString.Length > 0)
+                queryString = "?" + queryString;
+
+            this.Response.Redirect("~/Home/Events" + queryString);
+        }
+
+        [HttpPost]
+        public FileStreamResult MakeICal(HomeViewModel vm)
+        {
+            var checkedItems = new HashSet<string>(vm.Events.Where(w => w.Selected == true).Select(s => s.Summary).ToList());
+
+            var iCal = GetICal();
+
+            iCal.Events
+                .Where(evt => !checkedItems.Contains(evt.Summary))
+                .ToList()
+                .ForEach(evt => iCal.Events.Remove(evt));
+
+            var ms = new MemoryStream();
+            var serializer = new iCalendarSerializer();
+            serializer.Serialize(iCal, ms, Encoding.UTF8);
+            ms.Seek(0, 0);
+
+            return new FileStreamResult(ms, "text/Calendar");
+        }
+
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+
+        private static List<Group> GetGroups()
+        {
             var groups = new List<Group>
             {
                 new Group { Name = "Common", RegExString = "Bacon Butties|Second-Hand Uniform Shop|Start of Term|Term Resumes|Half-Term|Mufti-Day"},
@@ -31,74 +121,43 @@ namespace FilterSchoolCal.Web.Controllers
                 new Group { Name = "nthXI", RegExString=@"\d(st|nd|rd|th)" },
                 new Group { Name = "Swimming", RegExString="Swimming" }
             };
+            return groups;
+        }
 
-            var qs = this.Request.QueryString;
-            foreach(var key in qs.AllKeys.Where(k => k != null).ToList())
-            {
-                if (Boolean.Parse(qs[key]))
-                {
-                    var grp = groups.Where(w => w.Name == key).SingleOrDefault();
-                    if (grp != null)
-                        grp.Selected = true;
-                }
-            }
-
-            //Get Events
+        private List<SchoolEvent> GetUniqueEvents()
+        {
             var events = CacheHelper.Get("events", () =>
-                {
-                    var iCal = iCalendar.LoadFromFile(HttpContext.Server.MapPath("~/App_Data/" + Settings.Default.CalendarFileName))
-                                        .First();
-
-                    //populate list with unique Event summaries
-                    var uniqueItems = iCal.Events
-                                          .Select(evt => evt.Summary)
-                                          .Distinct()
-                                          .OrderBy(ob => ob)
-                                          .Select(s => new SchoolEvent { Summary = s})
-                                          .ToList();
-
-                    return uniqueItems;
-                }
-            );
-
-            groups.Where(w => w.Selected == true)
-                  .ToList()
-                  .ForEach(grp => grp.SelectEvents(ref events));
-
-            var vm = new HomeViewModel
             {
-                Events = events,
-                Groups = groups
-            };
+                //var iCal = iCalendar.LoadFromFile(HttpContext.Server.MapPath("~/App_Data/" + Settings.Default.CalendarFileName))
+                //                    .First();
 
-            return View(vm);
+                var iCal = GetICal();
+
+                //populate list with unique Event summaries
+                var uniqueItems = iCal.Events
+                                      .Select(evt => evt.Summary)
+                                      .Distinct()
+                                      .OrderBy(ob => ob)
+                                      .Select(s => new SchoolEvent { Summary = s })
+                                      .ToList();
+
+                return uniqueItems;
+            }
+            );
+            return events;
         }
 
-        [HttpPost]
-        public void Filter(HomeViewModel vm)
+        private IICalendar GetICal()
         {
-            string queryString = String.Empty;
-            foreach (var grp in vm.Groups.Where(w => w.Selected == true).ToList())
-                queryString += "&" + grp.Name + "=true";
+            var ical = CacheHelper.Get("ical", () =>
+            {
+                var iCalObj = iCalendar.LoadFromFile(HttpContext.Server.MapPath("~/App_Data/" + Settings.Default.CalendarFileName))
+                                    .First();
 
-            if (queryString.Length > 0)
-                queryString = "?" + queryString;
-
-            this.Response.Redirect("~/" + queryString);
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+                return iCalObj;
+            }
+            );
+            return ical;
         }
     }
 }

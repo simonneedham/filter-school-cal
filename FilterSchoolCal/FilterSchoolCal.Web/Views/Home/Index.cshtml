@@ -14,13 +14,17 @@
         </p>
         <p>
             <div class="alert alert-info">
-                Calendar: <strong>@Model.CalendarName</strong>
+                <strong>
+                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp;
+                    Calendar Term:&nbsp;
+                </strong>
+                @Model.CalendarName
             </div>
         </p>
     </div>
 </div>
 
-@using(Html.BeginForm("Filter", "Home", FormMethod.Post, new { @class = "form-inline" }))
+@using(Html.BeginForm("Events", "Home", FormMethod.Post, new { @class = "form-inline" }))
 {
 <div class="row">
     <div class="col-md-12">
@@ -60,28 +64,6 @@
     </div>
     <div class="col-md-10">
         &nbsp;
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <h2>Review your selected events</h2>
-        <div class="table-responsive">
-            <table class="table table-bordered table-condensed table-striped">
-                <tr><th></th><th>Event</th></tr>
-                @for(var j = 0; j < Model.Events.Count; j++)
-        {
-                    <tr>
-                        <td>
-                            @Html.CheckBoxFor(modelItem => modelItem.Events[j].Selected)
-                        </td>
-                        <td>
-                            @Model.Events[j].Summary
-                            @Html.HiddenFor(modelItem => modelItem.Events[j].Summary)
-                        </td>
-                    </tr>
-        }
-            </table>
-        </div>
     </div>
 </div>
 }

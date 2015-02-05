@@ -1,0 +1,38 @@
+﻿@model FilterSchoolCal.Web.ViewModels.HomeViewModel
+@using FilterSchoolCal.Web.Properties
+
+@{
+    ViewBag.Title = "Review Your Events";
+}
+
+@using (Html.BeginForm("MakeICal", "Home", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Review your selected events</h2>
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>&nbsp;This is a complete list of all the School events. We've automatically checked off events that have matched the topics you selected.
+            <br>
+            You can pick and choose a few more (or even unselect some), then scroll to the bottom of the page to download your personalised iCal file.
+            <br><br>
+            <div class="table-responsive">
+                <table class="table table-bordered table-condensed table-striped">
+                    <tr><th></th><th>Event</th></tr>
+                    @for (var j = 0; j < Model.Events.Count; j++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.CheckBoxFor(modelItem => modelItem.Events[j].Selected)
+                            </td>
+                            <td>
+                                @Model.Events[j].Summary
+                                @Html.HiddenFor(modelItem => modelItem.Events[j].Summary)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+    <button class="btn btn-danger"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;Download my Personalised iCal File</button>
+}
