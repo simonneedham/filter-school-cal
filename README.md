@@ -1,4 +1,4 @@
-iCalToolkit
-===========
+filter-school-cal
+=================
 
-Filters my School's crazy calendar
+Filters my School's crazy large calendar

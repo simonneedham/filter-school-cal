@@ -91,8 +91,13 @@ namespace FilterSchoolCal.Web.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Contact";
+            return View();
+        }
 
+        public ActionResult FAQ()
+        {
+            ViewBag.Message = "FAQ";
             return View();
         }
 
