@@ -105,16 +105,20 @@ namespace FilterSchoolCal.Web.Controllers
         {
             var groups = new List<Group>
             {
-                new Group { Name = "Common", RegExString = "Bacon Butties|Second-Hand Uniform Shop|Start of Term|Term Resumes|Half-Term|Mufti-Day"},
-                new Group { Name = "Reception", RegExString = "^(?!.*Staff Meeting).*Pre-Prep|Reception"},
-                new Group { Name = "Yr1", RegExString ="^(?!.*Staff Meeting).*Pre-Prep|Year 1" },
-                new Group { Name = "Yr2", RegExString="^(?!.*Staff Meeting).*Pre-Prep|Year 2"},
-                new Group { Name = "Yr3", RegExString="Yea(r|rs).*3|3P|3S|Y3|Year 2 – Year 4|No Activities|No Activities or Prep"},
-                new Group { Name = "Yr4", RegExString="Yea(r|rs).*4|Years 3 & 4|Y3 – 5|Y3 – 8|No Activities|No Activities or Prep"},
-                new Group { Name = "Yr5", RegExString="Yea(r|rs).*5|Y3 – 5|Y3 – 8|5A|5H|Y5|No Activities|No Activities or Prep" },
-                new Group { Name = "Yr6", RegExString=@"Yea(r|rs).*6|Y3 – 8|\(Y.*6|Years 5 – 7|No Activities|No Activities or Prep" },
-                new Group { Name = "Yr7" , RegExString=@"Yea(r|rs) 7|Y3 – 8|\(Y.*7|Years 5 – 7|No Activities|No Activities or Prep"},
-                new Group { Name = "Yr8", RegExString=@"Yea(r|rs) 8|Y3 – 8|\(Y.*8|No Activities|No Activities or Prep" },
+                //new Group { Name = "Reception", RegExString = "^(?!.*Staff Meeting).*Pre-Prep|Reception|Pre-Prep"},
+                //new Group { Name = "Yr1", RegExString ="^(?!.*Staff Meeting).*Pre-Prep|Year 1" },
+                //new Group { Name = "Yr2", RegExString="^(?!.*Staff Meeting).*Pre-Prep|Year 2"},
+
+                new Group { Name = "Common", RegExString = "Bacon Butties|Second-Hand Uniform Shop|Start of Term|Term Resumes|Half-Term|Mufti-Day|End of School|Bike & Scoot|Cirque|Whole School|Walk-to-School|Speech Day", Selected = true},
+                new Group { Name = "Reception", RegExString = "Pre-Prep|Reception|EYFS"},
+                new Group { Name = "Yr1", RegExString ="Pre-Prep|Year 1|1C|1M|Flop Club|EYFS" },
+                new Group { Name = "Yr2", RegExString="Pre-Prep|Year 2|Flop Club|EYFS"},
+                new Group { Name = "Yr3", RegExString="Yea(r|rs).*3|3P|3S|Y3|Year 2 – Year 4|Junior School|Activities|Prep School Parent|U’8"},
+                new Group { Name = "Yr4", RegExString="Yea(r|rs).*4|Years 3 & 4|Y3 – 5|Y3 – 8|Years 3 – 5|Years 3 – 6|Junior School|Activities|Prep School Parent|U’9"},
+                new Group { Name = "Yr5", RegExString="Yea(r|rs).*5|Y3 – 5|Y3 – 8|5A|5H|Y5|Years 4 – 6|Activities|Middle School|Prep School Parent|U’10" },
+                new Group { Name = "Yr6", RegExString=@"Yea(r|rs).*6|Y3 – 8|\(Y.*6|6B|6T|Years 5 – 7|Years 4 – 6|Years 4 – 8|Activities|Middle School|Prep School Parent|U’11" }, //U'11
+                new Group { Name = "Yr7" , RegExString=@"Yea(r|rs) 7|Y3 – 8|\(Y.*7|Years 5 – 7|Years 4 – 8|Activities|Senior|Prep School Parent|U’12"},
+                new Group { Name = "Yr8", RegExString=@"Yea(r|rs) 8|Y3 – 8|\(Y.*8|Years 4 – 8|Activities|Senior|Prep School Parent|U’13" },
                 new Group { Name = "DAS", RegExString = "DAS" },
                 new Group { Name = "nthXI", RegExString=@"\d(st|nd|rd|th)" },
                 new Group { Name = "Swimming", RegExString="Swimming" }
@@ -135,6 +139,9 @@ namespace FilterSchoolCal.Web.Controllers
                                       .OrderBy(ob => ob)
                                       .Select(s => new SchoolEvent { Summary = s })
                                       .ToList();
+
+
+                uniqueItems.ForEach(ui => System.Diagnostics.Debug.WriteLine(ui.Summary));
 
                 return uniqueItems;
             }
