@@ -110,7 +110,7 @@ namespace FilterSchoolCal.Web.Controllers
                 //new Group { Name = "Yr2", RegExString="^(?!.*Staff Meeting).*Pre-Prep|Year 2"},
 
                 new Group { Name = "Common", RegExString = "Bacon Butties|Second-Hand Uniform Shop|Start of Term|Term Resumes|Half-Term|Mufti-Day|End of School|Bike & Scoot|Cirque|Whole School|Walk-to-School|Speech Day", Selected = true},
-                new Group { Name = "Reception", RegExString = "Pre-Prep|Reception|EYFS"},
+                new Group { Name = "Reception", RegExString = "Pre-Prep|Reception|Flop Club|EYFS"},
                 new Group { Name = "Yr1", RegExString ="Pre-Prep|Year 1|1C|1M|Flop Club|EYFS" },
                 new Group { Name = "Yr2", RegExString="Pre-Prep|Year 2|Flop Club|EYFS"},
                 new Group { Name = "Yr3", RegExString="Yea(r|rs).*3|3P|3S|Y3|Year 2 – Year 4|Junior School|Activities|Prep School Parent|U’8"},
